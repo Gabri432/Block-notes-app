@@ -66,11 +66,7 @@ func createPost(w http.ResponseWriter, r *http.Request) {
 	if post.Title == "" {
 		respondError(w, http.StatusNoContent, "Not title provided.")
 	}
-	respondJSON(w, http.StatusOK, "createPost is working!")
-	postByte, _ := json.Marshal(post)
-	if ioutil.WriteFile("database/posts.json", postByte, 0666) != nil {
-		respondError(w, http.StatusInternalServerError, "Error while saving post.")
-	}
+	savePost(w, post, "database/posts.json")
 }
 
 func getFormData(w http.ResponseWriter, r *http.Request) Post {
@@ -83,10 +79,55 @@ func getFormData(w http.ResponseWriter, r *http.Request) Post {
 	}
 }
 func updatePost(w http.ResponseWriter, r *http.Request) {
-	respondJSON(w, http.StatusOK, "updatePost is working!")
+	content, err := ioutil.ReadFile("./database/posts.json")
+	if err != nil {
+		respondError(w, http.StatusInternalServerError, err.Error())
+	}
+	id := strings.TrimPrefix(r.URL.Path, "/modify/")
+	var posts Posts
+	json.Unmarshal(content, &posts)
+	post := getPostById(w, posts, id)
+	post = getFormData(w, r)
+	if post.Title == "" {
+		respondError(w, http.StatusNoContent, "Not title provided.")
+	}
+	savePost(w, post, "database/posts.json")
 }
 func deletePost(w http.ResponseWriter, r *http.Request) {
-	respondJSON(w, http.StatusOK, "deletePost is working!")
+	content, err := ioutil.ReadFile("./database/posts.json")
+	if err != nil {
+		respondJSON(w, http.StatusInternalServerError, err.Error())
+	}
+	id := strings.TrimPrefix(r.URL.Path, "/delete/")
+	var posts Posts
+	json.Unmarshal(content, &posts)
+	post := getPostById(w, posts, id)
+	for i, p := range posts {
+		if p == post {
+			posts = append(posts[:i], posts[i+1:]...)
+		}
+	}
+	for _, p := range posts {
+		savePost(w, p, "database/posts.json")
+	}
+}
+
+func getPostById(w http.ResponseWriter, posts Posts, id string) Post {
+	for _, post := range posts {
+		if post.PostId == id {
+			respondJSON(w, http.StatusFound, post)
+			return post
+		}
+	}
+	respondError(w, http.StatusNotFound, "Post not found.")
+	return Post{}
+}
+
+func savePost(w http.ResponseWriter, post Post, fileName string) {
+	postByte, _ := json.Marshal(post)
+	if ioutil.WriteFile(fileName, postByte, 0666) != nil {
+		respondError(w, http.StatusInternalServerError, "Error while saving post.")
+	}
 }
 
 func respondError(w http.ResponseWriter, code int, errorMessage string) {

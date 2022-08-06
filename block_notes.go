@@ -2,9 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type Post struct {
@@ -12,13 +14,14 @@ type Post struct {
 	Time       int    `json:"time"`
 	Title      string `json:"title"`
 	Content    string `json:"content"`
-	IsFinished string `json:"isFinished"`
+	IsFinished bool   `json:"isFinished"`
 }
 
 type Posts []Post
 
 func main() {
 	http.HandleFunc("/", readPost)
+	http.HandleFunc("/saved", readPost)
 	http.HandleFunc("/new", createPost)
 	http.HandleFunc("/modify/:id", updatePost)
 	http.HandleFunc("/delete/:id", deletePost)
@@ -30,12 +33,33 @@ func readPost(w http.ResponseWriter, r *http.Request) {
 	content, err := ioutil.ReadFile("database/posts.json")
 	if err != nil {
 		respondError(w, http.StatusInternalServerError, err.Error())
-		return
 	}
-	var posts Post
+	var posts Posts
+	var savedPosts Posts
 	json.Unmarshal(content, &posts)
-	// getHtml(w, "templates/jobOffers.html", jobOffers)
+	if route := strings.TrimPrefix(r.URL.Path, "/"); route == "saved" {
+		savedPosts = getSavedPosts(posts)
+	}
+	htmlPage, err := template.ParseFiles("main.html", "templates/header.html", "templates/input.html")
+	if err != nil {
+		respondError(w, http.StatusInternalServerError, err.Error())
+	}
+	if len(savedPosts) > 0 {
+		htmlPage.Execute(w, savedPosts)
+	} else {
+		htmlPage.Execute(w, posts)
+	}
 }
+
+func getSavedPosts(posts Posts) (savedPosts Posts) {
+	for _, post := range posts {
+		if !post.IsFinished {
+			savedPosts = append(savedPosts, post)
+		}
+	}
+	return
+}
+
 func createPost(w http.ResponseWriter, r *http.Request) {
 	respondJSON(w, http.StatusOK, "createPost is working!")
 }
@@ -48,6 +72,7 @@ func deletePost(w http.ResponseWriter, r *http.Request) {
 
 func respondError(w http.ResponseWriter, code int, errorMessage string) {
 	respondJSON(w, code, map[string]string{"error": errorMessage})
+	log.Fatal(errorMessage)
 }
 
 func respondJSON(w http.ResponseWriter, code int, data interface{}) {

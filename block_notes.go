@@ -9,7 +9,7 @@ import (
 
 type Post struct {
 	PostId     string `json:"postId"`
-	Time       string `json:"time"`
+	Time       int    `json:"time"`
 	Title      string `json:"title"`
 	Content    string `json:"content"`
 	IsFinished string `json:"isFinished"`

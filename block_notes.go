@@ -7,6 +7,16 @@ import (
 	"net/http"
 )
 
+type Post struct {
+	PostId     string `json:"postId"`
+	Time       string `json:"time"`
+	Title      string `json:"title"`
+	Content    string `json:"content"`
+	IsFinished string `json:"isFinished"`
+}
+
+type Posts []Post
+
 func main() {
 	http.HandleFunc("/", readPost)
 	http.HandleFunc("/new", createPost)
@@ -22,8 +32,8 @@ func readPost(w http.ResponseWriter, r *http.Request) {
 		respondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	var jobOffers string
-	json.Unmarshal(content, &jobOffers)
+	var posts Post
+	json.Unmarshal(content, &posts)
 	// getHtml(w, "templates/jobOffers.html", jobOffers)
 }
 func createPost(w http.ResponseWriter, r *http.Request) {

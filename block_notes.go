@@ -11,18 +11,18 @@ import (
 )
 
 type Post struct {
-	PostId     string `json:"postId"`
-	Time       int    `json:"time"`
-	Title      string `json:"title"`
-	Content    string `json:"content,omitempty"`
-	IsFinished bool   `json:"isFinished"`
+	PostId  string `json:"postId"`
+	Time    int    `json:"time"`
+	Title   string `json:"title"`
+	Content string `json:"content,omitempty"`
+	IsDraft bool   `json:"isDraft"`
 }
 
 type Posts []Post
 
 func main() {
 	http.HandleFunc("/", readPost)
-	http.HandleFunc("/saved", readPost)
+	http.HandleFunc("/drafts", readPost)
 	http.HandleFunc("/new", createPost)
 	http.HandleFunc("/modify/:id", updatePost)
 	http.HandleFunc("/delete/:id", deletePost)
@@ -36,26 +36,26 @@ func readPost(w http.ResponseWriter, r *http.Request) {
 		respondError(w, http.StatusInternalServerError, err.Error())
 	}
 	var posts Posts
-	var savedPosts Posts
+	var drafts Posts
 	json.Unmarshal(content, &posts)
 	if route := strings.TrimPrefix(r.URL.Path, "/"); route == "saved" {
-		savedPosts = getSavedPosts(posts)
+		drafts = getDrafts(posts)
 	}
 	htmlPage, err := template.ParseFiles("main.html", "templates/header.html", "templates/input.html")
 	if err != nil {
 		respondError(w, http.StatusInternalServerError, err.Error())
 	}
-	if len(savedPosts) > 0 {
-		htmlPage.Execute(w, savedPosts)
+	if len(drafts) > 0 {
+		htmlPage.Execute(w, drafts)
 	} else {
 		htmlPage.Execute(w, posts)
 	}
 }
 
-func getSavedPosts(posts Posts) (savedPosts Posts) {
+func getDrafts(posts Posts) (drafts Posts) {
 	for _, post := range posts {
-		if !post.IsFinished {
-			savedPosts = append(savedPosts, post)
+		if !post.IsDraft {
+			drafts = append(drafts, post)
 		}
 	}
 	return
@@ -67,6 +67,10 @@ func createPost(w http.ResponseWriter, r *http.Request) {
 		respondError(w, http.StatusNoContent, "Not title provided.")
 	}
 	respondJSON(w, http.StatusOK, "createPost is working!")
+	postByte, _ := json.Marshal(post)
+	if ioutil.WriteFile("database/posts.json", postByte, 0666) != nil {
+		respondError(w, http.StatusInternalServerError, "Error while saving post.")
+	}
 }
 
 func getFormData(w http.ResponseWriter, r *http.Request) Post {
@@ -75,7 +79,7 @@ func getFormData(w http.ResponseWriter, r *http.Request) Post {
 	time := time.Now().Second()
 	postId := title + "#" + string(rune(time))
 	return Post{
-		PostId: postId, Time: time, Title: title, Content: data.Get("content"), IsFinished: false,
+		PostId: postId, Time: time, Title: title, Content: data.Get("content"), IsDraft: false,
 	}
 }
 func updatePost(w http.ResponseWriter, r *http.Request) {

@@ -4,11 +4,13 @@ A simple CRUD application in GO.
 ## Functionalities
 * The app will allow the user to create, read, update and delete posts.
 
-* The user will also be capable of saving a post to publishing it later..
+* The user will also be capable of saving a post to publishing it later.
 
 
 ## Future features
 * It will show the last access time to a post.
+
+* The app will also paginate the posts, showing just 20 post per time.
 
 ## Why Golang?
 Because it is easy to use but also a really powerful tool.

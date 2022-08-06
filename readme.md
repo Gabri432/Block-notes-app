@@ -4,13 +4,11 @@ A simple CRUD application in GO.
 ## Functionalities
 * The app will allow the user to create, read, update and delete posts.
 
-* By applying the user gets to a form where data can be inserted.
-
-* It will also show all of his/her previously sent applications.
+* The user will also be capable of saving a post to publishing it later..
 
 
 ## Future features
-* It will show who applied for a specific job.
+* It will show the last access time to a post.
 
 ## Why Golang?
 Because it is easy to use but also a really powerful tool.

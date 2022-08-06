@@ -1,0 +1,11 @@
+{
+    "posts": [
+        {
+            "postId": "",
+            "time": 0,
+            "title": "",
+            "content": "",
+            "isFinished": false
+        }
+    ]
+}

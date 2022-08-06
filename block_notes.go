@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -16,6 +17,14 @@ func main() {
 
 func readPost(w http.ResponseWriter, r *http.Request) {
 	respondJSON(w, http.StatusOK, "readPost is working!")
+	content, err := ioutil.ReadFile("database/posts.json")
+	if err != nil {
+		respondError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	var jobOffers string
+	json.Unmarshal(content, &jobOffers)
+	// getHtml(w, "templates/jobOffers.html", jobOffers)
 }
 func createPost(w http.ResponseWriter, r *http.Request) {
 	respondJSON(w, http.StatusOK, "createPost is working!")

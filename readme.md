@@ -4,7 +4,7 @@ A simple CRUD application in GO.
 ## Functionalities
 * The app will allow the user to create, read, update and delete posts.
 
-* The user will also be capable of saving a post to publishing it later.
+* The user will also be capable of saving a post to finish it later.
 
 
 ## Future features

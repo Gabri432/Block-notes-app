@@ -7,13 +7,14 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 type Post struct {
 	PostId     string `json:"postId"`
 	Time       int    `json:"time"`
 	Title      string `json:"title"`
-	Content    string `json:"content"`
+	Content    string `json:"content,omitempty"`
 	IsFinished bool   `json:"isFinished"`
 }
 
@@ -61,7 +62,21 @@ func getSavedPosts(posts Posts) (savedPosts Posts) {
 }
 
 func createPost(w http.ResponseWriter, r *http.Request) {
+	post := getFormData(w, r)
+	if post.Title == "" {
+		respondError(w, http.StatusNoContent, "Not title provided.")
+	}
 	respondJSON(w, http.StatusOK, "createPost is working!")
+}
+
+func getFormData(w http.ResponseWriter, r *http.Request) Post {
+	data := r.PostForm
+	title := data.Get("title")
+	time := time.Now().Second()
+	postId := title + "#" + string(rune(time))
+	return Post{
+		PostId: postId, Time: time, Title: title, Content: data.Get("content"), IsFinished: false,
+	}
 }
 func updatePost(w http.ResponseWriter, r *http.Request) {
 	respondJSON(w, http.StatusOK, "updatePost is working!")

@@ -1,0 +1,20 @@
+{{define "post"}}
+<div class="post" onclick="details()">
+    <h3>{{.Title}}</h3>
+    <h5 id="time">{{.Time}}</h5>
+    <span id="id">{{.PostId}}</span>
+</div>
+<style>
+    .post {
+        border-radius: 5px;
+        border: 1px solid grey;
+        padding: 10px;
+    }
+</style>
+<script>
+    function details() {
+        var id = document.getElementById("id").value;
+        window.location.href = "http://localhost:8081/modify" + id
+    }
+</script>
+{{end}}

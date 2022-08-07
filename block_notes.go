@@ -31,7 +31,6 @@ func main() {
 }
 
 func readPost(w http.ResponseWriter, r *http.Request) {
-	respondJSON(w, http.StatusOK, "readPost is working!")
 	content, err := ioutil.ReadFile("database/posts.json")
 	if err != nil {
 		respondError(w, http.StatusInternalServerError, err.Error())
@@ -63,6 +62,9 @@ func getDrafts(posts Posts) (drafts Posts) {
 }
 
 func createPost(w http.ResponseWriter, r *http.Request) {
+	if http.MethodPost != r.Method {
+		return
+	}
 	renderHTML(w, "templates/form.html", false)
 	post := getFormData(w, r)
 	if post.Title == "" {

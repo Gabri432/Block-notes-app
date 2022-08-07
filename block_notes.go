@@ -42,7 +42,7 @@ func readPost(w http.ResponseWriter, r *http.Request) {
 	if route := strings.TrimPrefix(r.URL.Path, "/"); route == "saved" {
 		drafts = getDrafts(posts)
 	}
-	htmlPage, err := template.ParseFiles("main.html", "templates/header.html", "templates/input.html")
+	htmlPage, err := template.ParseFiles("templates/main.html", "templates/header.html", "templates/footer.html")
 	if err != nil {
 		respondError(w, http.StatusInternalServerError, err.Error())
 	}

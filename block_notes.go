@@ -25,8 +25,8 @@ func main() {
 	http.HandleFunc("/", readPost)
 	http.HandleFunc("/drafts", readPost)
 	http.HandleFunc("/new", createPost)
-	http.HandleFunc("/modify/:id", updatePost)
-	http.HandleFunc("/delete/:id", deletePost)
+	http.HandleFunc("/modify/", updatePost)
+	http.HandleFunc("/delete/", deletePost)
 	log.Fatal(http.ListenAndServe(":8081", nil))
 }
 

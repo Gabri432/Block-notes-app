@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
 )
 
 type Post struct {
@@ -73,7 +72,7 @@ func createPost(w http.ResponseWriter, r *http.Request) {
 	if http.MethodPost != r.Method {
 		return
 	}
-	post := getFormData(w, r)
+	post := GetFormData(w, r)
 	if post.Title == "" {
 		RespondError(w, http.StatusNoContent, "Not title provided.")
 		return
@@ -81,15 +80,6 @@ func createPost(w http.ResponseWriter, r *http.Request) {
 	SavePost(w, post, "database/posts.json")
 }
 
-func getFormData(w http.ResponseWriter, r *http.Request) Post {
-	data := r.PostForm
-	title := data.Get("title")
-	time := time.Now().Second()
-	postId := title + "#" + string(rune(time))
-	return Post{
-		PostId: postId, Time: time, Title: title, Content: data.Get("content"), IsDraft: false,
-	}
-}
 func updatePost(w http.ResponseWriter, r *http.Request) {
 	content, err := ioutil.ReadFile("./database/posts.json")
 	if err != nil {

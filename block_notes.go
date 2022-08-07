@@ -63,6 +63,7 @@ func getDrafts(posts Posts) (drafts Posts) {
 }
 
 func createPost(w http.ResponseWriter, r *http.Request) {
+	renderHTML(w, "templates/form.html", false)
 	post := getFormData(w, r)
 	if post.Title == "" {
 		respondError(w, http.StatusNoContent, "Not title provided.")
@@ -80,6 +81,7 @@ func getFormData(w http.ResponseWriter, r *http.Request) Post {
 	}
 }
 func updatePost(w http.ResponseWriter, r *http.Request) {
+	renderHTML(w, "templates/form.html", false)
 	content, err := ioutil.ReadFile("./database/posts.json")
 	if err != nil {
 		respondError(w, http.StatusInternalServerError, err.Error())
@@ -95,6 +97,7 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 	savePost(w, post, "database/posts.json")
 }
 func deletePost(w http.ResponseWriter, r *http.Request) {
+	renderHTML(w, "templates/form.html", true)
 	content, err := ioutil.ReadFile("./database/posts.json")
 	if err != nil {
 		respondJSON(w, http.StatusInternalServerError, err.Error())
@@ -132,6 +135,14 @@ func savePost(w http.ResponseWriter, post Post, fileName string) {
 	if ioutil.WriteFile(fileName, postByte, 0644) != nil {
 		respondError(w, http.StatusInternalServerError, "Error while saving post.")
 	}
+}
+
+func renderHTML(w http.ResponseWriter, htmlTemplate string, readMode bool) {
+	htmlPage, err := template.ParseFiles(htmlTemplate, "templates/header.html", "templates/footer.html")
+	if err != nil {
+		respondError(w, http.StatusInternalServerError, err.Error())
+	}
+	htmlPage.Execute(w, readMode)
 }
 
 func respondError(w http.ResponseWriter, code int, errorMessage string) {

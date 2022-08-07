@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 )
@@ -107,6 +108,9 @@ func deletePost(w http.ResponseWriter, r *http.Request) {
 			posts = append(posts[:i], posts[i+1:]...)
 		}
 	}
+	if err := os.Truncate("database/posts.json", 0); err != nil {
+		respondError(w, http.StatusInternalServerError, err.Error())
+	}
 	for _, p := range posts {
 		savePost(w, p, "database/posts.json")
 	}
@@ -125,7 +129,7 @@ func getPostById(w http.ResponseWriter, posts Posts, id string) Post {
 
 func savePost(w http.ResponseWriter, post Post, fileName string) {
 	postByte, _ := json.Marshal(post)
-	if ioutil.WriteFile(fileName, postByte, 0666) != nil {
+	if ioutil.WriteFile(fileName, postByte, 0644) != nil {
 		respondError(w, http.StatusInternalServerError, "Error while saving post.")
 	}
 }

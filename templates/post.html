@@ -1,20 +1,36 @@
 {{define "post"}}
-<div class="post" onclick="details()">
+<div class="post">
+    <a href="/modify/{{.PostId}}">
     <h3>{{.Title}}</h3>
     <h5 id="time">{{.Time}}</h5>
     <span id="id">{{.PostId}}</span>
+</a>
 </div>
 <style>
     .post {
         border-radius: 5px;
         border: 1px solid grey;
         padding: 10px;
+        width: 20%;
     }
+    #id {
+        display: none;
+    }
+    a {
+        text-decoration: none;
+        color: black;
+    }
+    @media screen and (max-width: 920px) {
+    .post {
+        width: 30%;
+    }
+}
 </style>
 <script>
-    function details() {
-        var id = document.getElementById("id").value;
-        window.location.href = "http://localhost:8081/modify" + id
+    function timeStamp() {
+        var time = document.getElementById("time").value;
+        var date = new Date(time * 1000).toLocaleTimeString("it-IT");
+        console.log(date)
     }
 </script>
 {{end}}

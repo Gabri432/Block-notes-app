@@ -48,7 +48,6 @@ func readPost(w http.ResponseWriter, r *http.Request) {
 	if route := strings.TrimPrefix(r.URL.Path, "/"); route == "saved" {
 		drafts = getDrafts(posts)
 	}
-	log.Print(posts)
 	htmlPage, err := template.ParseFiles("templates/main.html", "templates/header.html", "templates/footer.html", "templates/post.html")
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
@@ -58,7 +57,6 @@ func readPost(w http.ResponseWriter, r *http.Request) {
 		htmlPage.Execute(w, drafts)
 	} else {
 		htmlPage.Execute(w, posts)
-		RespondJSON(w, http.StatusOK, posts)
 	}
 }
 

@@ -1,3 +1,8 @@
 {{template "header"}}
 <h1>Hello main!</h1>
+<div class="posts-section">
+    {{range $index, $element := .Posts}}
+    {{$element}}
+    {{end}}
+</div>
 {{template "footer"}}

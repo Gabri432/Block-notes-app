@@ -42,11 +42,14 @@ func readPost(w http.ResponseWriter, r *http.Request) {
 	}
 	var posts Posts
 	var drafts Posts
-	json.Unmarshal(content, &posts)
+	if err := json.Unmarshal(content, &posts); err != nil {
+		log.Println(err.Error())
+	}
 	if route := strings.TrimPrefix(r.URL.Path, "/"); route == "saved" {
 		drafts = getDrafts(posts)
 	}
-	htmlPage, err := template.ParseFiles("templates/main.html", "templates/header.html", "templates/footer.html")
+	log.Print(posts)
+	htmlPage, err := template.ParseFiles("templates/main.html", "templates/header.html", "templates/footer.html", "templates/post.html")
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
@@ -55,6 +58,7 @@ func readPost(w http.ResponseWriter, r *http.Request) {
 		htmlPage.Execute(w, drafts)
 	} else {
 		htmlPage.Execute(w, posts)
+		RespondJSON(w, http.StatusOK, posts)
 	}
 }
 

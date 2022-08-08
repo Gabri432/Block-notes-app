@@ -1,5 +1,4 @@
-{
-    "posts": [
+[
         {
             "postId": "Go to the supermarket#1659890505",
             "time": 1659890505,
@@ -28,5 +27,4 @@
             "content": "",
             "isDraft": true
         }
-    ]
-}
+]

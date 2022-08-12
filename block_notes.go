@@ -70,7 +70,7 @@ func getDrafts(posts Posts) (drafts Posts) {
 }
 
 func createPost(w http.ResponseWriter, r *http.Request) {
-	RenderHTML(w, "templates/form.html", "new", Post{})
+	RenderHTML(w, "templates/form.html", "/new", Post{})
 	if http.MethodPost != r.Method {
 		return
 	}
@@ -92,7 +92,7 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 	var posts Posts
 	json.Unmarshal(content, &posts)
 	post := GetPostById(w, posts, id)
-	RenderHTML(w, "templates/form.html", "modify", post)
+	RenderHTML(w, "templates/form.html", "/modify/", post)
 	if http.MethodPut != r.Method {
 		return
 	}
@@ -112,7 +112,7 @@ func deletePost(w http.ResponseWriter, r *http.Request) {
 	var posts Posts
 	json.Unmarshal(content, &posts)
 	post := GetPostById(w, posts, id)
-	RenderHTML(w, "templates/form.html", "delete", post)
+	RenderHTML(w, "templates/form.html", "/delete/", post)
 	for i, p := range posts {
 		if p == post {
 			posts = append(posts[:i], posts[i+1:]...)

@@ -1,7 +1,7 @@
 {{template "header"}}
 <h1>Hello form!</h1>
 <div id="form-container">
-    <form action="http://localhost:8081/modify/" method="post">
+    <form action="http://localhost:8081{{.Route}}" method="post">
         <input id="title" placeholder="Title" value="{{.Content.Title}}">
         <br />
         <br />
@@ -11,10 +11,18 @@
         <textarea>{{.Content.Content}}</textarea>
         <br />
         <br />
+        {{if (eq .Route "/new")}}
         <button>Save</button>
         <button>Save as Draft</button>
+        {{end}}
     </form>
+    {{if (eq .Route "/modify/")}}
+    <button>Save</button>
+    <button>Save as Draft</button>
+    {{end}}
+    {{if (ne .Route "/new")}}
     <button>Delete</button>
+    {{end}}
 </div>
 {{template "footer"}}
 <style>

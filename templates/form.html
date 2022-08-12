@@ -62,7 +62,6 @@
             var date = new Date('{{.Content.Time}}' * 1000).toLocaleString("it-IT");
             document.getElementById("time").setAttribute("value", date);
         } else {
-            console.log(new Date().toLocaleString("it-IT"))
            document.getElementById("time").setAttribute("value", new Date().toLocaleString("it-IT"));
         }
     }

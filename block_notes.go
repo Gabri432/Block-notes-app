@@ -91,6 +91,7 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 	id := strings.TrimPrefix(r.URL.Path, "/modify/")
 	var posts Posts
 	json.Unmarshal(content, &posts)
+	log.Print(id, r.URL.Path)
 	post := GetPostById(w, posts, id)
 	RenderHTML(w, "templates/form.html", false, post)
 	if http.MethodPut != r.Method {

@@ -13,7 +13,7 @@ func GetFormData(w http.ResponseWriter, r *http.Request) Post {
 	data := r.PostForm
 	title := data.Get("title")
 	time := time.Now().Second()
-	postId := title + "#" + string(rune(time))
+	postId := title + "-" + string(rune(time))
 	return Post{
 		PostId: postId, Time: time, Title: title, Content: data.Get("content"), IsDraft: false,
 	}

@@ -1,3 +1,56 @@
 {{template "header"}}
 <h1>Hello form!</h1>
+<div id="form-container">
+    <form action="http://localhost:8081/modify/" method="post">
+        <input id="title" placeholder="Title" value="{{.Content.Title}}">
+        <br />
+        <br />
+        <input id="time" placeholder="Time" readonly>
+        <br />
+        <br />
+        <textarea>{{.Content.Content}}</textarea>
+        <br />
+        <br />
+        <button>Save</button>
+        <button>Save as Draft</button>
+    </form>
+    <button>Delete</button>
+</div>
 {{template "footer"}}
+<style>
+    #form-container {
+        padding-top: 1%;
+        width: 60%;
+        margin-left: 20%;
+        text-align: center;
+        border: 1px solid grey;
+        box-shadow: 5px 5px grey;
+        border-radius: 5px;
+        padding-bottom: 1%;
+    }
+    input, textarea {
+        width: 90%;
+        max-width: 90%;
+        outline: none;
+    }
+    input {
+        border: none;
+        border-bottom: 1px solid grey;
+    }
+    input:hover {
+        border-bottom: 1px solid black;
+    }
+    #title {
+        font-size: 24px;
+        font-weight: bold;
+    }
+    textarea {
+        min-height: 100px;
+    }
+</style>
+<script>
+    window.onload = () => {
+        var date = new Date('{{.Content.Time}}' * 1000).toLocaleString("it-IT");
+        document.getElementById("time").setAttribute("value", date);
+    }
+</script>

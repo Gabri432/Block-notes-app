@@ -21,8 +21,8 @@ type Post struct {
 type Posts []Post
 
 type Data struct {
-	Content  Post
-	ReadMode bool
+	Content Post
+	Route   string
 }
 
 func main() {
@@ -70,7 +70,7 @@ func getDrafts(posts Posts) (drafts Posts) {
 }
 
 func createPost(w http.ResponseWriter, r *http.Request) {
-	RenderHTML(w, "templates/form.html", false, Post{})
+	RenderHTML(w, "templates/form.html", "new", Post{})
 	if http.MethodPost != r.Method {
 		return
 	}
@@ -91,9 +91,8 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 	id := strings.TrimPrefix(r.URL.Path, "/modify/")
 	var posts Posts
 	json.Unmarshal(content, &posts)
-	log.Print(id, r.URL.Path)
 	post := GetPostById(w, posts, id)
-	RenderHTML(w, "templates/form.html", false, post)
+	RenderHTML(w, "templates/form.html", "modify", post)
 	if http.MethodPut != r.Method {
 		return
 	}
@@ -113,7 +112,7 @@ func deletePost(w http.ResponseWriter, r *http.Request) {
 	var posts Posts
 	json.Unmarshal(content, &posts)
 	post := GetPostById(w, posts, id)
-	RenderHTML(w, "templates/form.html", true, post)
+	RenderHTML(w, "templates/form.html", "delete", post)
 	for i, p := range posts {
 		if p == post {
 			posts = append(posts[:i], posts[i+1:]...)

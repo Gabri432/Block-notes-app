@@ -22,7 +22,6 @@ func GetFormData(w http.ResponseWriter, r *http.Request) Post {
 func GetPostById(w http.ResponseWriter, posts Posts, id string) Post {
 	for _, post := range posts {
 		if post.PostId == id {
-			RespondJSON(w, http.StatusFound, post)
 			return post
 		}
 	}
@@ -37,12 +36,12 @@ func SavePost(w http.ResponseWriter, post Post, fileName string) {
 	}
 }
 
-func RenderHTML(w http.ResponseWriter, htmlTemplate string, readMode bool, post Post) {
+func RenderHTML(w http.ResponseWriter, htmlTemplate string, route string, post Post) {
 	htmlPage, err := template.ParseFiles(htmlTemplate, "templates/header.html", "templates/footer.html")
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 	}
-	data := Data{Content: post, ReadMode: readMode}
+	data := Data{Content: post, Route: route}
 	htmlPage.Execute(w, data)
 }
 

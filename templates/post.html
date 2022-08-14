@@ -3,7 +3,6 @@
     <img onload="timeStamp('{{.Time}}')"  src="https://picsum.photos/100/100" />
     <a href="/modify/{{.PostId}}">
     <h3>{{.Title}}</h3>
-    <h5 id="time">{{.Time}}</h5>
     <span id="id">{{.PostId}}</span>
     <input type="text" id="{{.Time}}"/>
 </a>
@@ -14,6 +13,7 @@
         border: 1px solid grey;
         padding: 10px;
         width: 20%;
+        min-height: 100px;
     }
     #id, img {
         display: none;

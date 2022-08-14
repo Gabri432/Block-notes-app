@@ -4,6 +4,9 @@
     <a href="/modify/{{.PostId}}">
     <h3>{{.Title}}</h3>
     <span id="id">{{.PostId}}</span>
+    {{if (eq .IsDraft true)}}
+    <p>Draft</p>
+    {{end}}
     <input type="text" id="{{.Time}}"/>
 </a>
 </div>
@@ -25,6 +28,9 @@
     input {
         border: none;
         outline: none;
+    }
+    p {
+        color: red;
     }
     @media screen and (max-width: 920px) {
     .post {

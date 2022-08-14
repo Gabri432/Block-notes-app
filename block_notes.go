@@ -45,7 +45,7 @@ func readPost(w http.ResponseWriter, r *http.Request) {
 	if err := json.Unmarshal(content, &posts); err != nil {
 		log.Println(err.Error())
 	}
-	if route := strings.TrimPrefix(r.URL.Path, "/"); route == "saved" {
+	if route := strings.TrimPrefix(r.URL.Path, "/"); route == "drafts" {
 		drafts = getDrafts(posts)
 	}
 	htmlPage, err := template.ParseFiles("templates/main.html", "templates/header.html", "templates/footer.html", "templates/post.html")
@@ -62,7 +62,7 @@ func readPost(w http.ResponseWriter, r *http.Request) {
 
 func getDrafts(posts Posts) (drafts Posts) {
 	for _, post := range posts {
-		if !post.IsDraft {
+		if post.IsDraft {
 			drafts = append(drafts, post)
 		}
 	}

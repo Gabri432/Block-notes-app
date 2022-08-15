@@ -70,11 +70,11 @@ func getDrafts(posts Posts) (drafts Posts) {
 }
 
 func createPost(w http.ResponseWriter, r *http.Request) {
+	post := GetFormData(w, r)
 	RenderHTML(w, "templates/form.html", "/new", Post{})
 	if http.MethodPost != r.Method {
 		return
 	}
-	post := GetFormData(w, r)
 	if post.Title == "" {
 		RespondError(w, http.StatusNoContent, "No title provided.")
 		return
@@ -108,7 +108,6 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 }
 
 func deletePost(w http.ResponseWriter, r *http.Request) {
-	log.Print("deletePost is called!", r.Method)
 	content, err := ioutil.ReadFile("./database/posts.json")
 	if err != nil {
 		RespondJSON(w, http.StatusInternalServerError, err.Error())

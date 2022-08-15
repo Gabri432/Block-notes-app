@@ -22,5 +22,5 @@ Also thanks to the 'html/template' Golang library rendering frontend content is 
 - Run "go run ." to open the application on http://localhost:8081, where you will see the list of your posts.
 - Go to http://localhost:8081/new or click "Create New Post" to create a new post.
 - Go to http://localhost:8081/drafts or click "See Drafts" to see all of the posts you created but didn't finish.
-- Go to http://localhost:8081/modify/:id or click "Modify (this post)" to modify a post.
+- Go to http://localhost:8081/modify/:id or click on a post to modify it.
 - Go to http://localhost:8081/delete/:id or click "Delete (this post)" to cancel a post.

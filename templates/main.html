@@ -4,7 +4,7 @@
     {{range $index, $element := .}}
     {{template "post" $element}}
     {{end}}
-    <button id="new"><a href="http://localhost:8081/new">+</a></button>
+    <a href="http://localhost:8081/new"><button id="new">+</button></a>
 </div>
 {{template "footer"}}
 
@@ -12,12 +12,34 @@
     #new {
         border-radius: 100px;
         background-color: blueviolet;
-        color: green;
         font-size: 40px;
-        width: 80px;
-        height: 80px;
+        width: 70px;
+        height: 70px;
         position: fixed;
         right: 5%;
         bottom: 5%;
+        cursor: pointer;
+    }
+    #new:hover {
+        background-color: #5c3353;
+        transition: 0.25s;
+        font-size: 45px;
     }
 </style>
+<script>
+    window.onload = switchRoute()
+    document.querySelector("h1").addEventListener('click', switchRoute.bind(this), false);
+    function switchRoute() {
+        title = document.querySelector("h1").value;
+        console.log(title)
+        switch (title) {
+            case "Your posts":
+                title = "Your drafts"
+                break
+            case "Your drafts":
+                title = "Your posts"
+                break
+        }
+        document.querySelector("h1").setAttribute("value", title);
+    }
+</script>

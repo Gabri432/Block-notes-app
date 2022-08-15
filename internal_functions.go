@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -18,8 +19,12 @@ func GetFormData(w http.ResponseWriter, r *http.Request) Post {
 	title := data.Get("title")
 	time := time.Now()
 	postId := title + "-" + string(rune(time.Second()))
+	isDraft, err := strconv.ParseBool(data.Get("isDraft"))
+	if err != nil {
+		isDraft = true
+	}
 	return Post{
-		PostId: postId, Time: int(time.Unix()), Title: title, Content: data.Get("content"), IsDraft: false,
+		PostId: postId, Time: int(time.Unix()), Title: title, Content: data.Get("content"), IsDraft: isDraft,
 	}
 }
 
@@ -46,6 +51,21 @@ func SavePost(w http.ResponseWriter, post Post, fileName string) {
 	if ioutil.WriteFile(fileName, postByte, 0644) != nil {
 		RespondError(w, http.StatusInternalServerError, "Error while saving post.")
 	}
+}
+
+func removePost(posts Posts, post Post) Posts {
+	for i, p := range posts {
+		if p == post {
+			posts = append(posts[:i], posts[i+1:]...)
+		}
+	}
+	return posts
+}
+
+func unmarshalPost(w http.ResponseWriter, jsonContent []byte, postId string) (Post, Posts) {
+	var posts Posts
+	json.Unmarshal(jsonContent, &posts)
+	return GetPostById(w, posts, postId), posts
 }
 
 func RenderHTML(w http.ResponseWriter, htmlTemplate string, route string, post Post) {

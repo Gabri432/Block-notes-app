@@ -30,5 +30,25 @@
   "title": "New post title",
   "content": "New post content",
   "isDraft": false
+ },
+ {
+  "postId": "New title-$",
+  "time": 1660571496,
+  "title": "New title",
+  "content": "Spaaaaaaam",
+  "isDraft": true
+ },
+ {
+  "postId": "New amazing post-!",
+  "time": 1660571673,
+  "title": "New amazing post",
+  "content": "content content content",
+  "isDraft": true
+ },
+ {
+  "postId": "Go to the supermarket-1659890505",
+  "time": 1660579665,
+  "title": "",
+  "isDraft": false
  }
 ]

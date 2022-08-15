@@ -1,7 +1,7 @@
 {{template "header"}}
 <h1>Hello form!</h1>
 <div id="form-container">
-    <form action="http://localhost:8081{{.Route}}" method="post">
+    <form action="http://localhost:8081{{.Route}}" method="post" enctype="application/x-www-form-urlencoded">
         <input name="title" id="title" placeholder="Title" value="{{.Content.Title}}" required>
         <br />
         <br />
@@ -17,8 +17,8 @@
         {{end}}
     </form>
     {{if (eq .Route "/modify/")}}
-    <button>Save</button>
-    <button>Save as Draft</button>
+    <button id="false">Save</button>
+    <button id="true">Save as Draft</button>
     {{end}}
     {{if (ne .Route "/new")}}
     <button>Delete</button>
@@ -63,6 +63,28 @@
             document.getElementById("time").setAttribute("value", date);
         } else {
            document.getElementById("time").setAttribute("value", new Date().toLocaleString("it-IT"));
+        }
+    }
+    document.getElementById("false").addEventListener('click', updatePost.bind(this, false), false);
+    document.getElementById("true").addEventListener('click', updatePost.bind(this, true), false);
+
+    async function updatePost(draft) {
+        title = document.getElementById("title").value;
+        content = document.querySelector("textarea").value;
+        const body = {title: title, content: content, isDraft: draft};
+        console.log(body);
+        try {
+            const response = await fetch("http://localhost:8081/modify/{{.Content.PostId}}",{
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+            })
+            const data = await response.json();
+            console.log(data);
+        } catch(e) {
+            console.log(e);
         }
     }
 </script>

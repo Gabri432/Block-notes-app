@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 type Post struct {
@@ -76,53 +77,53 @@ func createPost(w http.ResponseWriter, r *http.Request) {
 	}
 	post := GetFormData(w, r)
 	if post.Title == "" {
-		RespondError(w, http.StatusNoContent, "Not title provided.")
+		RespondError(w, http.StatusNoContent, "No title provided.")
 		return
 	}
 	SavePost(w, post, "database/posts.json")
 }
 
 func updatePost(w http.ResponseWriter, r *http.Request) {
+	contentALL, _ := ioutil.ReadAll(r.Body)
+	var newPost Post
+	json.Unmarshal(contentALL, &newPost)
+	log.Print("before", newPost)
 	content, err := ioutil.ReadFile("./database/posts.json")
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	id := strings.TrimPrefix(r.URL.Path, "/modify/")
-	var posts Posts
-	json.Unmarshal(content, &posts)
-	post := GetPostById(w, posts, id)
+	post, posts := unmarshalPost(w, content, id)
 	RenderHTML(w, "templates/form.html", "/modify/", post)
 	if http.MethodPut != r.Method {
 		return
 	}
-	post = GetFormData(w, r)
-	if post.Title == "" {
-		RespondError(w, http.StatusNoContent, "Not title provided.")
+	newPost = Post{PostId: post.PostId, Time: int(time.Now().Unix()), Content: newPost.Content, Title: newPost.Title}
+	log.Print("after", newPost)
+	newPostList := removePost(posts, post)
+	newPostList = append(newPostList, newPost)
+	if newPost.Title == "" {
+		RespondError(w, http.StatusNoContent, "No title provided.")
 		return
 	}
-	SavePost(w, post, "database/posts.json")
+	SavePost(w, newPost, "database/posts.json")
 }
+
 func deletePost(w http.ResponseWriter, r *http.Request) {
 	content, err := ioutil.ReadFile("./database/posts.json")
 	if err != nil {
 		RespondJSON(w, http.StatusInternalServerError, err.Error())
 	}
 	id := strings.TrimPrefix(r.URL.Path, "/delete/")
-	var posts Posts
-	json.Unmarshal(content, &posts)
-	post := GetPostById(w, posts, id)
+	post, posts := unmarshalPost(w, content, id)
 	RenderHTML(w, "templates/form.html", "/delete/", post)
-	for i, p := range posts {
-		if p == post {
-			posts = append(posts[:i], posts[i+1:]...)
-		}
-	}
+	newPostList := removePost(posts, post)
 	if err := os.Truncate("database/posts.json", 0); err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	for _, p := range posts {
+	for _, p := range newPostList {
 		SavePost(w, p, "database/posts.json")
 	}
 }

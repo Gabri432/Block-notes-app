@@ -4,5 +4,20 @@
     {{range $index, $element := .}}
     {{template "post" $element}}
     {{end}}
+    <button id="new"><a href="http://localhost:8081/new">+</a></button>
 </div>
 {{template "footer"}}
+
+<style>
+    #new {
+        border-radius: 100px;
+        background-color: blueviolet;
+        color: green;
+        font-size: 40px;
+        width: 80px;
+        height: 80px;
+        position: fixed;
+        right: 5%;
+        bottom: 5%;
+    }
+</style>

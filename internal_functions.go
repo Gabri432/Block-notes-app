@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 )
@@ -53,7 +54,7 @@ func SavePost(w http.ResponseWriter, post Post, fileName string) {
 	}
 }
 
-func removePost(posts Posts, post Post) Posts {
+func RemovePost(posts Posts, post Post) Posts {
 	for i, p := range posts {
 		if p == post {
 			posts = append(posts[:i], posts[i+1:]...)
@@ -74,6 +75,16 @@ func ReversePosts(list Posts) Posts {
 		newList = append(newList, list[i])
 	}
 	return newList
+}
+
+func UpdatePostList(w http.ResponseWriter, fileName string, postList Posts) {
+	if err := os.Truncate("database/posts.json", 0); err != nil {
+		RespondError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	for _, p := range postList {
+		SavePost(w, p, "database/posts.json")
+	}
 }
 
 func RenderHTML(w http.ResponseWriter, htmlTemplate string, route string, post Post) {

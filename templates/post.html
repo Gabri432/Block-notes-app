@@ -1,6 +1,6 @@
 {{define "post"}}
-<a href="/modify/{{.PostId}}">
 <div class="post">
+    <a href="/modify/{{.PostId}}">
     <img onload="timeStamp('{{.Time}}')"  src="https://picsum.photos/100/100" />
     <h3>{{.Title}}</h3>
     <span id="id">{{.PostId}}</span>
@@ -8,8 +8,9 @@
     <p>Draft</p>
     {{end}}
     <input type="text" id="{{.Time}}"/>
-</div>
 </a>
+</div>
+<br />
 <style>
     .post {
         border-radius: 5px;

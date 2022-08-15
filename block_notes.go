@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 )
@@ -99,22 +98,17 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	newPost = Post{PostId: post.PostId, Time: int(time.Now().Unix()), Content: newPost.Content, Title: newPost.Title, IsDraft: newPost.IsDraft}
-	newPostList := removePost(posts, post)
+	newPostList := RemovePost(posts, post)
 	newPostList = append(newPostList, newPost)
 	if newPost.Title == "" {
 		RespondError(w, http.StatusNoContent, "No title provided.")
 		return
 	}
-	if err := os.Truncate("database/posts.json", 0); err != nil {
-		RespondError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-	for _, p := range newPostList {
-		SavePost(w, p, "database/posts.json")
-	}
+	UpdatePostList(w, "database/posts.json", newPostList)
 }
 
 func deletePost(w http.ResponseWriter, r *http.Request) {
+	log.Print("deletePost is called!", r.Method)
 	content, err := ioutil.ReadFile("./database/posts.json")
 	if err != nil {
 		RespondJSON(w, http.StatusInternalServerError, err.Error())
@@ -122,12 +116,6 @@ func deletePost(w http.ResponseWriter, r *http.Request) {
 	id := strings.TrimPrefix(r.URL.Path, "/delete/")
 	post, posts := UnmarshalPost(w, content, id)
 	RenderHTML(w, "templates/form.html", "/delete/", post)
-	newPostList := removePost(posts, post)
-	if err := os.Truncate("database/posts.json", 0); err != nil {
-		RespondError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-	for _, p := range newPostList {
-		SavePost(w, p, "database/posts.json")
-	}
+	newPostList := RemovePost(posts, post)
+	UpdatePostList(w, "database/posts.json", newPostList)
 }

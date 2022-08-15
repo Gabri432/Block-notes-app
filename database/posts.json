@@ -1,54 +1,37 @@
 [
  {
   "postId": "Go to the supermarket-1659890505",
-  "time": 1659890505,
+  "time": 1660586912,
   "title": "Go to the supermarket.",
+  "content": "content",
   "isDraft": false
  },
  {
   "postId": "Clean your room.-1659889987",
-  "time": 1659889987,
+  "time": 1660587086,
   "title": "Clean your room.",
-  "content": "bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+  "content": "Other test content",
   "isDraft": false
  },
  {
-  "postId": "Lorem Ispum.-1659890212",
-  "time": 1659890212,
-  "title": "Lorem Ispum.",
+  "postId": "New amazing post-!",
+  "time": 1660587140,
+  "title": "New amazing post",
+  "content": "save as new post",
   "isDraft": false
- },
- {
-  "postId": "Buy some flowers-1659890444",
-  "time": 1659890444,
-  "title": "Buy some flowers",
-  "isDraft": true
  },
  {
   "postId": "New post title-5",
-  "time": 1660338233,
+  "time": 1660587306,
   "title": "New post title",
-  "content": "New post content",
+  "content": "New post content updated",
   "isDraft": false
  },
  {
   "postId": "New title-$",
-  "time": 1660571496,
+  "time": 1660588496,
   "title": "New title",
-  "content": "Spaaaaaaam",
+  "content": "Test test teeeeeeest",
   "isDraft": true
- },
- {
-  "postId": "New amazing post-!",
-  "time": 1660571673,
-  "title": "New amazing post",
-  "content": "content content content",
-  "isDraft": true
- },
- {
-  "postId": "Go to the supermarket-1659890505",
-  "time": 1660579665,
-  "title": "",
-  "isDraft": false
  }
 ]

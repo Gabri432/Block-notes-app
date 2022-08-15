@@ -62,10 +62,18 @@ func removePost(posts Posts, post Post) Posts {
 	return posts
 }
 
-func unmarshalPost(w http.ResponseWriter, jsonContent []byte, postId string) (Post, Posts) {
+func UnmarshalPost(w http.ResponseWriter, jsonContent []byte, postId string) (Post, Posts) {
 	var posts Posts
 	json.Unmarshal(jsonContent, &posts)
 	return GetPostById(w, posts, postId), posts
+}
+
+func ReversePosts(list Posts) Posts {
+	var newList Posts
+	for i := len(list) - 1; i >= 0; i-- {
+		newList = append(newList, list[i])
+	}
+	return newList
 }
 
 func RenderHTML(w http.ResponseWriter, htmlTemplate string, route string, post Post) {

@@ -55,9 +55,9 @@ func readPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if len(drafts) > 0 {
-		htmlPage.Execute(w, drafts)
+		htmlPage.Execute(w, ReversePosts(drafts))
 	} else {
-		htmlPage.Execute(w, posts)
+		htmlPage.Execute(w, ReversePosts(posts))
 	}
 }
 
@@ -87,27 +87,31 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 	contentALL, _ := ioutil.ReadAll(r.Body)
 	var newPost Post
 	json.Unmarshal(contentALL, &newPost)
-	log.Print("before", newPost)
 	content, err := ioutil.ReadFile("./database/posts.json")
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	id := strings.TrimPrefix(r.URL.Path, "/modify/")
-	post, posts := unmarshalPost(w, content, id)
+	post, posts := UnmarshalPost(w, content, id)
 	RenderHTML(w, "templates/form.html", "/modify/", post)
 	if http.MethodPut != r.Method {
 		return
 	}
-	newPost = Post{PostId: post.PostId, Time: int(time.Now().Unix()), Content: newPost.Content, Title: newPost.Title}
-	log.Print("after", newPost)
+	newPost = Post{PostId: post.PostId, Time: int(time.Now().Unix()), Content: newPost.Content, Title: newPost.Title, IsDraft: newPost.IsDraft}
 	newPostList := removePost(posts, post)
 	newPostList = append(newPostList, newPost)
 	if newPost.Title == "" {
 		RespondError(w, http.StatusNoContent, "No title provided.")
 		return
 	}
-	SavePost(w, newPost, "database/posts.json")
+	if err := os.Truncate("database/posts.json", 0); err != nil {
+		RespondError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	for _, p := range newPostList {
+		SavePost(w, p, "database/posts.json")
+	}
 }
 
 func deletePost(w http.ResponseWriter, r *http.Request) {
@@ -116,7 +120,7 @@ func deletePost(w http.ResponseWriter, r *http.Request) {
 		RespondJSON(w, http.StatusInternalServerError, err.Error())
 	}
 	id := strings.TrimPrefix(r.URL.Path, "/delete/")
-	post, posts := unmarshalPost(w, content, id)
+	post, posts := UnmarshalPost(w, content, id)
 	RenderHTML(w, "templates/form.html", "/delete/", post)
 	newPostList := removePost(posts, post)
 	if err := os.Truncate("database/posts.json", 0); err != nil {

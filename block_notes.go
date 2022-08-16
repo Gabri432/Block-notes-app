@@ -71,6 +71,7 @@ func getDrafts(posts Posts) (drafts Posts) {
 
 func createPost(w http.ResponseWriter, r *http.Request) {
 	post := GetFormData(w, r)
+	post.Title = strings.TrimSpace(post.Title)
 	RenderHTML(w, "templates/form.html", "/new", Post{})
 	if http.MethodPost != r.Method {
 		return

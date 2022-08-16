@@ -1,6 +1,8 @@
 {{template "header"}}
 <h1>Your posts</h1>
 <button id="change">Your posts</button>
+<br />
+<br />
 <div class="posts-section">
     {{range $index, $element := .}}
     {{template "post" $element}}
@@ -32,18 +34,17 @@
         change = document.getElementById("change");
         h1 = document.querySelector("h1")
         path = window.location.pathname.split("/")[1]
-        change.innerHTML = "Your posts"
+        change.innerHTML = "Check your drafts"
         h1.innerHTML = "Your posts"
         if (path == "drafts") {
-            change.innerHTML = "Your drafts"
+            change.innerHTML = "Back to your posts"
             h1.innerHTML = "Your drafts"
         }
         change.addEventListener('click', switchRoute, false)
     }
     function switchRoute() {
-        change = document.getElementById("change").innerHTML;
         h1 = document.querySelector("h1").innerHTML;
-        switch (change) {
+        switch (h1) {
             case "Your posts":
             window.location.href = "http://localhost:8081/drafts"
                 break

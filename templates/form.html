@@ -65,9 +65,14 @@
            document.getElementById("time").setAttribute("value", new Date().toLocaleString("it-IT"));
         }
     }
-    document.getElementById("false").addEventListener('click', updatePost.bind(this, false), false);
-    document.getElementById("true").addEventListener('click', updatePost.bind(this, true), false);
-    document.getElementById("delete").addEventListener('click', deletePost.bind(this), false);
+    idFalse = document.getElementById("false")
+    idTrue = document.getElementById("true")
+    idDelete = document.getElementById("delete")
+    if (idTrue != null || idFalse != null) {
+        idFalse.addEventListener('click', updatePost.bind(this, false), false);
+       idTrue.addEventListener('click', updatePost.bind(this, true), false);
+    }
+    if (idDelete != null) {idDelete.addEventListener('click', deletePost.bind(this), false);}
 
     async function updatePost(draft) {
         title = document.getElementById("title").value;
@@ -82,10 +87,10 @@
             },
             body: JSON.stringify(body)
             })
-            const data = await response.json();
-            console.log(data);
+            window.location.href = "http://localhost:8081/"
         } catch(e) {
             console.log(e);
+            console.log("Could not modify this post.")
         }
     }
 
@@ -98,10 +103,10 @@
             },
             body: ''
             })
-            const data = await response.json();
-            console.log(data);
+            window.location.href = "http://localhost:8081/"
         } catch(e) {
             console.log(e);
+            console.log("Could not delete this post.")
         }
     }
 </script>

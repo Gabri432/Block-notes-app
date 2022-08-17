@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -17,14 +18,14 @@ func GetFormData(w http.ResponseWriter, r *http.Request) Post {
 	}
 	data := r.PostForm
 	title := data.Get("title")
-	time := time.Now()
-	postId := title + "-" + string(rune(time.Second()))
+	time := int(time.Now().Unix())
+	postId := title + "-" + strconv.Itoa(time)
 	isDraft, err := strconv.ParseBool(data.Get("isDraft"))
 	if err != nil {
 		isDraft = true
 	}
 	return Post{
-		PostId: postId, Time: int(time.Unix()), Title: title, Content: data.Get("content"), IsDraft: isDraft,
+		PostId: postId, Time: time, Title: title, Content: data.Get("content"), IsDraft: isDraft,
 	}
 }
 
@@ -88,6 +89,13 @@ func UpdatePostList(w http.ResponseWriter, fileName string, postList Posts) {
 	for _, p := range postList {
 		SavePost(w, p, fileName)
 	}
+}
+
+func FormattingPost(newPost Post) Post {
+	newPostTime := int(time.Now().Unix())
+	newPostTitle := strings.TrimSpace(newPost.Title)
+	newPostId := newPostTitle + strconv.Itoa(newPostTime)
+	return Post{PostId: newPostId, Time: newPostTime, Content: newPost.Content, Title: newPostTitle, IsDraft: newPost.IsDraft}
 }
 
 func RenderHTML(w http.ResponseWriter, htmlTemplate string, route string, post Post) {

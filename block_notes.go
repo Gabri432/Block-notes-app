@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"strings"
-	"time"
 )
 
 type Post struct {
@@ -98,9 +97,9 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 	if http.MethodPut != r.Method {
 		return
 	}
-	newPost = Post{PostId: post.PostId, Time: int(time.Now().Unix()), Content: newPost.Content, Title: newPost.Title, IsDraft: newPost.IsDraft}
+	newPost1 := FormattingPost(newPost)
 	newPostList := RemovePost(posts, post)
-	newPostList = append(newPostList, newPost)
+	newPostList = append(newPostList, newPost1)
 	if newPost.Title == "" {
 		RespondError(w, http.StatusNoContent, "No title provided.")
 		return
@@ -109,7 +108,7 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 }
 
 func deletePost(w http.ResponseWriter, r *http.Request) {
-	content, err := ioutil.ReadFile("./database/posts.json")
+	content, err := ioutil.ReadFile("database/posts.json")
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 	}
@@ -117,5 +116,6 @@ func deletePost(w http.ResponseWriter, r *http.Request) {
 	post, posts := SearchPostInJSON(w, content, id)
 	RenderHTML(w, "templates/form.html", "/delete/", post)
 	newPostList := RemovePost(posts, post)
+	log.Print(len(newPostList), len(posts))
 	UpdatePostList(w, "database/posts.json", newPostList)
 }

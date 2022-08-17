@@ -29,6 +29,9 @@ func GetFormData(w http.ResponseWriter, r *http.Request) Post {
 }
 
 func GetPostById(w http.ResponseWriter, posts Posts, id string) Post {
+	if len(posts) < 1 {
+		return Post{}
+	}
 	for _, post := range posts {
 		if post.PostId == id {
 			return post
@@ -38,11 +41,11 @@ func GetPostById(w http.ResponseWriter, posts Posts, id string) Post {
 	return Post{}
 }
 
-func SavePost(w http.ResponseWriter, post Post, fileName string) {
-	content, err := ioutil.ReadFile("database/posts.json")
+func SavePost(w http.ResponseWriter, post Post, fileName string) error {
+	content, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
-		return
+		return err
 	}
 	var posts Posts
 	json.Unmarshal(content, &posts)
@@ -51,6 +54,7 @@ func SavePost(w http.ResponseWriter, post Post, fileName string) {
 	if ioutil.WriteFile(fileName, postByte, 0644) != nil {
 		RespondError(w, http.StatusInternalServerError, "Error while saving post.")
 	}
+	return err
 }
 
 func RemovePost(posts Posts, post Post) Posts {
@@ -77,12 +81,12 @@ func ReversePosts(list Posts) Posts {
 }
 
 func UpdatePostList(w http.ResponseWriter, fileName string, postList Posts) {
-	if err := os.Truncate("database/posts.json", 0); err != nil {
+	if err := os.Truncate(fileName, 0); err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	for _, p := range postList {
-		SavePost(w, p, "database/posts.json")
+		SavePost(w, p, fileName)
 	}
 }
 

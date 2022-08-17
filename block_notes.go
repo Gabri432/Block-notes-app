@@ -93,7 +93,7 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	id := strings.TrimPrefix(r.URL.Path, "/modify/")
-	post, posts := UnmarshalPost(w, content, id)
+	post, posts := SearchPostInJSON(w, content, id)
 	RenderHTML(w, "templates/form.html", "/modify/", post)
 	if http.MethodPut != r.Method {
 		return
@@ -114,7 +114,7 @@ func deletePost(w http.ResponseWriter, r *http.Request) {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 	}
 	id := strings.TrimPrefix(r.URL.Path, "/delete/")
-	post, posts := UnmarshalPost(w, content, id)
+	post, posts := SearchPostInJSON(w, content, id)
 	RenderHTML(w, "templates/form.html", "/delete/", post)
 	newPostList := RemovePost(posts, post)
 	UpdatePostList(w, "database/posts.json", newPostList)

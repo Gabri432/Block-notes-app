@@ -66,7 +66,7 @@ func RemovePost(posts Posts, post Post) Posts {
 	return posts
 }
 
-func UnmarshalPost(w http.ResponseWriter, jsonContent []byte, postId string) (Post, Posts) {
+func SearchPostInJSON(w http.ResponseWriter, jsonContent []byte, postId string) (Post, Posts) {
 	var posts Posts
 	json.Unmarshal(jsonContent, &posts)
 	return GetPostById(w, posts, postId), posts
@@ -94,6 +94,7 @@ func RenderHTML(w http.ResponseWriter, htmlTemplate string, route string, post P
 	htmlPage, err := template.ParseFiles(htmlTemplate, "templates/header.html", "templates/footer.html")
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
+		return
 	}
 	data := Data{Content: post, Route: route}
 	htmlPage.Execute(w, data)

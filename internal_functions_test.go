@@ -1,13 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"net/http"
 	"testing"
 )
 
-func TestGetFormData(t *testing.T) {
-	return
-}
 func TestGetPostById(t *testing.T) {
 	var w http.ResponseWriter
 	var posts Posts
@@ -17,15 +15,34 @@ func TestGetPostById(t *testing.T) {
 		t.Fatalf("Got %s, expected ''.", post.Title)
 	}
 }
-func TestSavePost(t *testing.T) {
-	return
-}
 func TestRemovePost(t *testing.T) {
+	var posts Posts
+	post := Post{Title: "Lorem Ispum", Content: "Lorem Ispum"}
+	posts = append(posts, post)
+	newPostsList := RemovePost(posts, post)
+	if len(newPostsList) != 0 {
+		t.Fatal("Expected to have a list with zero posts remaining.")
+	}
 	return
 }
-func TestUnmarshalPost(t *testing.T) {
-	return
+func TestSearchPostInJSON(t *testing.T) {
+	var w http.ResponseWriter
+	var posts Posts
+	postInput := Post{PostId: "id"}
+	posts = append(posts, postInput)
+	jsonContent, _ := json.Marshal(posts)
+	postOutput, _ := SearchPostInJSON(w, jsonContent, postInput.PostId)
+	if postOutput.PostId != postInput.PostId {
+		t.Fatalf("Expected to find %s, got %s", postInput.PostId, postOutput.PostId)
+	}
 }
 func TestReversePosts(t *testing.T) {
-	return
+	var posts Posts
+	post1 := Post{Title: "Lorem Ispum", Content: "Lorem Ispum"}
+	post2 := Post{Title: "Ipsum Lorem", Content: "Ipsum Lorem"}
+	posts = append(posts, post1, post2)
+	newPostsList := ReversePosts(posts)
+	if newPostsList[0] != posts[1] {
+		t.Fatal("Expected new slice first element to be the old slice second element.")
+	}
 }

@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"html/template"
 	"io/ioutil"
 	"net/http"
@@ -97,8 +96,9 @@ func RenderHTML(w http.ResponseWriter, htmlTemplate string, route string, post P
 }
 
 func RespondError(w http.ResponseWriter, code int, errorMessage string) {
-	RespondJSON(w, code, map[string]string{"error": errorMessage})
-	fmt.Println(errorMessage)
+	//RespondJSON(w, code, map[string]string{"error": errorMessage})
+	errorPost := Post{Title: "Error " + strconv.Itoa(code), Content: errorMessage}
+	RenderHTML(w, "templates/error.html", "/error", errorPost)
 }
 
 func RespondJSON(w http.ResponseWriter, code int, data interface{}) {

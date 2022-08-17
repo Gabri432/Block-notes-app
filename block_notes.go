@@ -111,7 +111,7 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 func deletePost(w http.ResponseWriter, r *http.Request) {
 	content, err := ioutil.ReadFile("./database/posts.json")
 	if err != nil {
-		RespondJSON(w, http.StatusInternalServerError, err.Error())
+		RespondError(w, http.StatusInternalServerError, err.Error())
 	}
 	id := strings.TrimPrefix(r.URL.Path, "/delete/")
 	post, posts := UnmarshalPost(w, content, id)

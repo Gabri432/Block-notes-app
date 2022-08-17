@@ -1,10 +1,10 @@
 # Block-notes-app
-A simple CRUD application in GO.
+A simple CRUD application in plain GO, without any external dependency such as 'gorilla/mux'.
 
 ## Functionalities
 * The app will allow the user to create, read, update and delete posts.
 
-* The user will also be capable of saving a post to finish it later, saving them as drafts.
+* Posts can also be saved as drafts and can be viewed in the drafts section.
 
 
 ## Future features
@@ -29,19 +29,19 @@ Also thanks to the 'html/template' Golang library rendering frontend content is 
 ## Project Structure
 ### Directories
 - block_notes (main directory):
-  it contains three '.go' files: 'block_notes.go', 'internal_functions.go' 'internal_functions_test.go';
-  it also contains the file executable 'block-notes-app.exe', the license and the readme files.
+  - it contains three '.go' files: 'block_notes.go', 'internal_functions.go' 'internal_functions_test.go';
+  - it also contains the file executable 'block-notes-app.exe', the license and the readme files.
 
 - database:
-  it contains a single file 'posts.json' that will behave like a sort of database holding all of our posts.
+  - it contains a single file 'posts.json' that will behave like a sort of database holding all of our posts.
 
 - templates:
-  where all of the '.html' files are contained to render our frontend;
-  'main.html' to serve all the existing posts and/or drafts;
-  'error.html' where the user will be redirected in case of error;
-  'form.html' where posts can be created, modified or deleted;
-  'post.html' that describes how a single post should appear;
-  'header.html' and 'footer.html' for rendering each page.
+  - where all of the '.html' files are contained to render our frontend;
+  - 'main.html' to serve all the existing posts and/or drafts;
+  - 'error.html' where the user will be redirected in case of error;
+  - 'form.html' where posts can be created, modified or deleted;
+  - 'post.html' that describes how a single post should appear;
+  - 'header.html' and 'footer.html' for rendering each page.
 
 ## Notes
 - This project isn't perfect. This was just an opportunity for me to further explore the GO programming language.

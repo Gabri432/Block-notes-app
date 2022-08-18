@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"html/template"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -100,20 +99,20 @@ func FormattingPost(newPost Post) Post {
 	return Post{PostId: newPostId, Time: newPostTime, Content: newPost.Content, Title: newPostTitle, IsDraft: newPost.IsDraft}
 }
 
-func ReadFrom(w http.ResponseWriter, fileName string, startPosition, endPosition int) []byte {
+func ReadFrom(w http.ResponseWriter, fileName string, endPosition, startPosition int) []byte {
 	file, err := os.Open(fileName)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return []byte{}
 	}
 	defer file.Close()
-	_, errorMessage := file.Seek(int64(endPosition), startPosition)
+	offset, errorMessage := file.Seek(int64(endPosition), startPosition)
 	if errorMessage != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return []byte{}
 	}
-	newContent, _ := os.ReadFile(fileName)
-	log.Print("after seek", string(newContent))
+	newContent := make([]byte, offset)
+	file.Read(newContent)
 	return newContent
 }
 

@@ -18,8 +18,21 @@ Because it is easy to use but also a really powerful tool.
 Also thanks to the 'html/template' Golang library rendering frontend content is much simpler and fast, allowing me to focus more on the backend side of the project.
 
 ## How to use it
-- Use "git clone https://github.com/Gabri432/Block-notes-app.git" to clone the project.
-- Run "go run ." to open the application on http://localhost:8081, where you will see the list of your posts.
+### Clone the Project
+```
+git clone https://github.com/Gabri432/Block-notes-app.git
+```
+### Run the code
+```
+go run .
+```
+### Run the tests
+```
+go test
+```
+
+## Routes
+- http://localhost:8081 where you will see the list of your posts.
 - Go to http://localhost:8081/new or click "Create New Post" to create a new post.
 - Go to http://localhost:8081/drafts or click "See Drafts" to see all of the posts you created but didn't finish.
 - Go to http://localhost:8081/modify/:id or click on a post to modify it.
@@ -49,3 +62,6 @@ Also thanks to the 'html/template' Golang library rendering frontend content is 
 - There is of course room for improvements on both front-end and back-end sides.
 - There are some tests but they do not cover most of the code.
 - I hope this work could still be helpful or useful for somewhat porpuse.
+`sh `
+ciao
+```

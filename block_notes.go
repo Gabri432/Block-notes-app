@@ -116,6 +116,5 @@ func deletePost(w http.ResponseWriter, r *http.Request) {
 	post, posts := SearchPostInJSON(w, content, id)
 	RenderHTML(w, "templates/form.html", "/delete/", post)
 	newPostList := RemovePost(posts, post)
-	log.Print(len(newPostList), len(posts))
 	UpdatePostList(w, "database/posts.json", newPostList)
 }

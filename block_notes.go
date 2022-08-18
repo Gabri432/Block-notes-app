@@ -54,9 +54,9 @@ func readPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if len(drafts) > 0 {
-		htmlPage.Execute(w, ReversePosts(drafts))
+		htmlPage.Execute(w, drafts)
 	} else {
-		htmlPage.Execute(w, ReversePosts(posts))
+		htmlPage.Execute(w, posts)
 	}
 }
 

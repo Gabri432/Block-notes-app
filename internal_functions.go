@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"html/template"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -50,6 +51,8 @@ func SavePost(w http.ResponseWriter, post Post, fileName string) error {
 	var posts Posts
 	json.Unmarshal(content, &posts)
 	posts = append(posts, post)
+	copy(posts[1:], posts)
+	posts[0] = post
 	postByte, _ := json.MarshalIndent(posts, "", " ")
 	if os.WriteFile(fileName, postByte, 0644) != nil {
 		RespondError(w, http.StatusInternalServerError, "Error while saving post.")
@@ -95,6 +98,24 @@ func FormattingPost(newPost Post) Post {
 	newPostTitle := strings.TrimSpace(newPost.Title)
 	newPostId := newPostTitle + strconv.Itoa(newPostTime)
 	return Post{PostId: newPostId, Time: newPostTime, Content: newPost.Content, Title: newPostTitle, IsDraft: newPost.IsDraft}
+}
+
+func PaginatePosts(w http.ResponseWriter, fileName string, position int) {
+	content, _ := os.ReadFile(fileName)
+	log.Print("before seek", string(content))
+	file, err := os.Open(fileName)
+	if err != nil {
+		RespondError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	_, errorMessage := file.Seek(66, 0)
+	if errorMessage != nil {
+		RespondError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	newContent, _ := os.ReadFile(fileName)
+	log.Print("after seek", string(newContent))
+	defer file.Close()
 }
 
 func RenderHTML(w http.ResponseWriter, htmlTemplate string, route string, post Post) {

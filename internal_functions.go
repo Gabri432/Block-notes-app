@@ -100,22 +100,21 @@ func FormattingPost(newPost Post) Post {
 	return Post{PostId: newPostId, Time: newPostTime, Content: newPost.Content, Title: newPostTitle, IsDraft: newPost.IsDraft}
 }
 
-func PaginatePosts(w http.ResponseWriter, fileName string, position int) {
-	content, _ := os.ReadFile(fileName)
-	log.Print("before seek", string(content))
+func ReadFrom(w http.ResponseWriter, fileName string, startPosition, endPosition int) []byte {
 	file, err := os.Open(fileName)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
-		return
+		return []byte{}
 	}
-	_, errorMessage := file.Seek(66, 0)
+	defer file.Close()
+	_, errorMessage := file.Seek(int64(endPosition), startPosition)
 	if errorMessage != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
-		return
+		return []byte{}
 	}
 	newContent, _ := os.ReadFile(fileName)
 	log.Print("after seek", string(newContent))
-	defer file.Close()
+	return newContent
 }
 
 func RenderHTML(w http.ResponseWriter, htmlTemplate string, route string, post Post) {

@@ -32,23 +32,23 @@ go test
 ```
 
 ## Routes
-- http://localhost:8081 where you will see the list of your posts.
-- Go to http://localhost:8081/new or click "Create New Post" to create a new post.
-- Go to http://localhost:8081/drafts or click "See Drafts" to see all of the posts you created but didn't finish.
-- Go to http://localhost:8081/modify/:id or click on a post to modify it.
-- Go to http://localhost:8081/delete/:id or click "Delete (this post)" to cancel a post.
+- `http://localhost:8081` where you will see the list of your posts.
+- Go to `http://localhost:8081/new` or click "Create New Post" to create a new post.
+- Go to `http://localhost:8081/drafts` or click "See Drafts" to see all of the posts you created but didn't finish.
+- Go to `http://localhost:8081/modify/:id` or click on a post to modify it.
+- Go to `http://localhost:8081/delete/:id` or click "Delete (this post)" to cancel a post.
 
 
 ## Project Structure
 ### Directories
-- block_notes (main directory):
+- `block_notes` (main directory):
   - it contains three '.go' files: 'block_notes.go', 'internal_functions.go' 'internal_functions_test.go';
   - it also contains the file executable 'block-notes-app.exe', the license and the readme files.
 
-- database:
+- `database`:
   - it contains a single file 'posts.json' that will behave like a sort of database holding all of our posts.
 
-- templates:
+- `templates`:
   - where all of the '.html' files are contained to render our frontend;
   - 'main.html' to serve all the existing posts and/or drafts;
   - 'error.html' where the user will be redirected in case of error;
@@ -62,6 +62,3 @@ go test
 - There is of course room for improvements on both front-end and back-end sides.
 - There are some tests but they do not cover most of the code.
 - I hope this work could still be helpful or useful for somewhat porpuse.
-`sh `
-ciao
-```

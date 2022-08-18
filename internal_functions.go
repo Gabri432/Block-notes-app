@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"html/template"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"strconv"
@@ -43,7 +42,7 @@ func GetPostById(w http.ResponseWriter, posts Posts, id string) Post {
 }
 
 func SavePost(w http.ResponseWriter, post Post, fileName string) error {
-	content, err := ioutil.ReadFile(fileName)
+	content, err := os.ReadFile(fileName)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return err
@@ -52,7 +51,7 @@ func SavePost(w http.ResponseWriter, post Post, fileName string) error {
 	json.Unmarshal(content, &posts)
 	posts = append(posts, post)
 	postByte, _ := json.MarshalIndent(posts, "", " ")
-	if ioutil.WriteFile(fileName, postByte, 0644) != nil {
+	if os.WriteFile(fileName, postByte, 0644) != nil {
 		RespondError(w, http.StatusInternalServerError, "Error while saving post.")
 	}
 	return err

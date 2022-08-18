@@ -3,9 +3,10 @@ package main
 import (
 	"encoding/json"
 	"html/template"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -34,7 +35,7 @@ func main() {
 }
 
 func readPost(w http.ResponseWriter, r *http.Request) {
-	content, err := ioutil.ReadFile("database/posts.json")
+	content, err := os.ReadFile("database/posts.json")
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
@@ -83,10 +84,10 @@ func createPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func updatePost(w http.ResponseWriter, r *http.Request) {
-	contentALL, _ := ioutil.ReadAll(r.Body)
+	contentALL, _ := io.ReadAll(r.Body)
 	var newPost Post
 	json.Unmarshal(contentALL, &newPost)
-	content, err := ioutil.ReadFile("./database/posts.json")
+	content, err := os.ReadFile("database/posts.json")
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
@@ -108,7 +109,7 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 }
 
 func deletePost(w http.ResponseWriter, r *http.Request) {
-	content, err := ioutil.ReadFile("database/posts.json")
+	content, err := os.ReadFile("database/posts.json")
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 	}

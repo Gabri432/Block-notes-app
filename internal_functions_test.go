@@ -48,12 +48,18 @@ func TestReversePosts(t *testing.T) {
 	}
 }
 
-func TestReadFrom(t *testing.T) {
+func TestReadFromTo(t *testing.T) {
 	var w http.ResponseWriter
 	data, _ := os.Stat("database/posts.json")
-	bytes := ReadFrom(w, "database/posts.json", int(data.Size()), 0)
+	bytes := ReadFromTo(w, "database/posts.json", int(data.Size()), 0)
 	content, _ := os.ReadFile("database/posts.json")
 	if len(bytes) != len(content) {
 		t.Fatalf("Expected len(bytes) == %d, got len(bytes) == %d.", len(content), len(bytes))
 	}
+}
+
+func TestScanPosts(t *testing.T) {
+	file, _ := os.Open("database/posts.json")
+	bytes, _ := ScanPosts(file, 1, 13)
+	t.Fatal(string(bytes))
 }

@@ -99,22 +99,6 @@ func FormattingPost(newPost Post) Post {
 	return Post{PostId: newPostId, Time: newPostTime, Content: newPost.Content, Title: newPostTitle, IsDraft: newPost.IsDraft}
 }
 
-func ReadFrom(w http.ResponseWriter, fileName string, endPosition, startPosition int) []byte {
-	file, err := os.Open(fileName)
-	if err != nil {
-		RespondError(w, http.StatusInternalServerError, err.Error())
-		return []byte{}
-	}
-	defer file.Close()
-	newContent := make([]byte, endPosition)
-	_, errorMessage := file.ReadAt(newContent, int64(startPosition))
-	if errorMessage != nil {
-		RespondError(w, http.StatusInternalServerError, err.Error())
-		return []byte{}
-	}
-	return newContent
-}
-
 func RenderHTML(w http.ResponseWriter, htmlTemplate string, route string, post Post) {
 	htmlPage, err := template.ParseFiles(htmlTemplate, "templates/header.html", "templates/footer.html")
 	if err != nil {

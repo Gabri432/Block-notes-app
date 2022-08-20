@@ -23,6 +23,10 @@ type Posts []Post
 type Data struct {
 	Content Post
 	Route   string
+	Info    struct {
+		AmountBytesRead     int    `json:"amountBytesRead"`
+		LastEvaluatedPostId string `json:"lastEvaluatedPostId"`
+	}
 }
 
 func main() {

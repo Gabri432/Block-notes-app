@@ -106,13 +106,12 @@ func ReadFrom(w http.ResponseWriter, fileName string, endPosition, startPosition
 		return []byte{}
 	}
 	defer file.Close()
-	offset, errorMessage := file.Seek(int64(endPosition), startPosition)
+	newContent := make([]byte, endPosition)
+	_, errorMessage := file.ReadAt(newContent, int64(startPosition))
 	if errorMessage != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return []byte{}
 	}
-	newContent := make([]byte, offset)
-	file.Read(newContent)
 	return newContent
 }
 

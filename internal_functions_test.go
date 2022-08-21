@@ -57,9 +57,3 @@ func TestReadFromTo(t *testing.T) {
 		t.Fatalf("Expected len(bytes) == %d, got len(bytes) == %d.", len(content), len(bytes))
 	}
 }
-
-func TestScanPosts(t *testing.T) {
-	file, _ := os.Open("database/posts.json")
-	bytes, _ := ScanPosts(file, 1, 13)
-	t.Fatal(string(bytes))
-}

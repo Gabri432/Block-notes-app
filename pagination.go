@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"encoding/json"
 	"net/http"
 	"os"
 )
@@ -25,29 +24,30 @@ func ReadFromTo(w http.ResponseWriter, fileName string, endPosition, startPositi
 	return newContent
 }
 
-func ScanPosts(file *os.File, startingLine, endingLine int) ([]byte, error) {
+func ScanPosts(file *os.File, startingLine, endingLine int) []byte {
 	if startingLine < 1 {
 		startingLine = 1
 	}
-	if difference := endingLine - startingLine; difference%NumPostFields != 0 {
-		endingLine = difference
+	if endingLine < startingLine {
+		endingLine = startingLine + NumPostFields + 1
 	}
 	currentLine := 0
 	scanner := bufio.NewScanner(file)
-	text := ""
+	textBytes := make([]byte, 0)
+	squareB := []byte("[]")
+	textBytes = append(textBytes, squareB[0])
 	for scanner.Scan() {
 		if currentLine < startingLine {
 			currentLine++
 			continue
 		}
-		if currentLine+1 > endingLine {
+		if currentLine > endingLine {
 			break
 		}
-		text += scanner.Text()
+		textBytes = append(textBytes, scanner.Bytes()...)
+		currentLine++
 	}
-	bytes, err := json.MarshalIndent(text[:len(text)-1], "", " ")
-	if err != nil {
-		return []byte{}, err
-	}
-	return bytes, err
+	textBytes = textBytes[:len(textBytes)-1]
+	textBytes = append(textBytes, squareB[1])
+	return textBytes
 }

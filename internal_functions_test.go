@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"net/http"
-	"os"
 	"testing"
 )
 
@@ -45,15 +44,5 @@ func TestReversePosts(t *testing.T) {
 	newPostsList := ReversePosts(posts)
 	if newPostsList[0] != posts[1] {
 		t.Fatal("Expected new slice first element to be the old slice second element.")
-	}
-}
-
-func TestReadFromTo(t *testing.T) {
-	var w http.ResponseWriter
-	data, _ := os.Stat("database/posts.json")
-	bytes := ReadFromTo(w, "database/posts.json", int(data.Size()), 0)
-	content, _ := os.ReadFile("database/posts.json")
-	if len(bytes) != len(content) {
-		t.Fatalf("Expected len(bytes) == %d, got len(bytes) == %d.", len(content), len(bytes))
 	}
 }

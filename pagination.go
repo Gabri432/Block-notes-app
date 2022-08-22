@@ -6,7 +6,15 @@ import (
 	"os"
 )
 
-const NumPostFields = 5
+const (
+	NumPostFields   = 5
+	PostSizeInLines = NumPostFields + 2
+	PageSizeInLines = PostSizeInLines * 5
+)
+
+type QueryParameters struct {
+	Page int `json:"page"`
+}
 
 func ReadFromTo(w http.ResponseWriter, fileName string, endPosition, startPosition int) []byte {
 	file, err := os.Open(fileName)
@@ -50,4 +58,13 @@ func ScanPosts(file *os.File, startingLine, endingLine int) []byte {
 	textBytes = textBytes[:len(textBytes)-1]
 	textBytes = append(textBytes, squareB[1])
 	return textBytes
+}
+
+func PaginatePosts(file *os.File, currentPage int) []byte {
+	if currentPage == 0 {
+		currentPage = 1
+	}
+	start := (currentPage-1)*PageSizeInLines + 1
+	end := currentPage * PageSizeInLines
+	return ScanPosts(file, start, end)
 }

@@ -23,10 +23,6 @@ type Posts []Post
 type Data struct {
 	Content Post
 	Route   string
-	Info    struct {
-		AmountBytesRead     int    `json:"amountBytesRead"`
-		LastEvaluatedPostId string `json:"lastEvaluatedPostId"`
-	}
 }
 
 func main() {
@@ -40,8 +36,7 @@ func main() {
 
 func readPost(w http.ResponseWriter, r *http.Request) {
 	file, err := os.Open("database/posts.json")
-	r.URL.Query()
-	content := ScanPosts(file, 1, 21)
+	content := PaginatePosts(file, StringToInt(r.URL.Query().Get("page")))
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return

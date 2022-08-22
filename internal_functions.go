@@ -91,6 +91,11 @@ func FormattingPost(newPost Post) Post {
 	return Post{PostId: newPostId, Time: newPostTime, Content: newPost.Content, Title: newPostTitle, IsDraft: newPost.IsDraft}
 }
 
+func StringToInt(s string) int {
+	i, _ := strconv.Atoi(s)
+	return i
+}
+
 func RenderHTML(w http.ResponseWriter, htmlTemplate string, route string, post Post) {
 	htmlPage, err := template.ParseFiles(htmlTemplate, "templates/header.html", "templates/footer.html")
 	if err != nil {

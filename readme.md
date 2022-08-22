@@ -6,11 +6,11 @@ A simple CRUD application in plain GO, without any external dependency such as '
 
 * Posts can also be saved as drafts and can be viewed in the drafts section.
 
+* Posts are paginated, they will be 5 per page.
+
 
 ## Future features
 * It will show the last access time to a post.
-
-* The app will also paginate the posts, showing just 20 post per time.
 
 ## Why Golang?
 Because it is easy to use but also a really powerful tool.
@@ -24,7 +24,7 @@ git clone https://github.com/Gabri432/Block-notes-app.git
 ```
 ### Run the code
 ```
-go run .
+go run block_notes
 ```
 ### Run the tests
 ```
@@ -41,12 +41,13 @@ go test
 
 ## Project Structure
 ### Directories
-- `block_notes` (main directory):
-  - it contains three '.go' files: 'block_notes.go', 'internal_functions.go' 'internal_functions_test.go';
-  - it also contains the file executable 'block-notes-app.exe', the license and the readme files.
+- `block_notes` (main directory), which contains:
+  - three '.go' files: 'block_notes.go', 'internal_functions.go' 'pagination.go';
+  - their respective test files;
+  - an executable 'block-notes-app.exe', the license and the readme files.
 
-- `database`:
-  - it contains a single file 'posts.json' that will behave like a sort of database holding all of our posts.
+- `database`, which contains:
+  - file 'posts.json' that will behave like a sort of database holding all of our posts.
 
 - `templates`:
   - where all of the '.html' files are contained to render our frontend;

@@ -1,4 +1,7 @@
 {{define "post"}}
+{{if not .Time}}
+<span class="loading-icon">{{template "loader"}}</span>
+{{end}}
 <div class="post">
     <a href="/modify/{{.PostId}}">
     <img onload="timeStamp('{{.Time}}')"  src="https://picsum.photos/100/100" />
@@ -43,6 +46,7 @@
     function timeStamp(time) {
         var date = new Date(time * 1000).toLocaleString("it-IT");
         document.getElementById(time).setAttribute("value", date);
+        document.querySelector(".loading-icon").setAttribute("display", none);
     }
 </script>
 {{end}}

@@ -50,7 +50,8 @@ func readPost(w http.ResponseWriter, r *http.Request) {
 	if route := strings.TrimPrefix(r.URL.Path, "/"); route == "drafts" {
 		drafts = getDrafts(posts)
 	}
-	htmlPage, err := template.ParseFiles("templates/main.html", "templates/header.html", "templates/footer.html", "templates/post.html")
+	myTemplates := []string{"templates/main.html", "templates/header.html", "templates/footer.html", "templates/post.html", "templates/loader.html"}
+	htmlPage, err := template.ParseFiles(myTemplates...)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return

@@ -36,13 +36,3 @@ func TestSearchPostInJSON(t *testing.T) {
 		t.Fatalf("Expected to find %s, got %s", postInput.PostId, postOutput.PostId)
 	}
 }
-func TestReversePosts(t *testing.T) {
-	var posts Posts
-	post1 := Post{Title: "Lorem Ispum", Content: "Lorem Ispum"}
-	post2 := Post{Title: "Ipsum Lorem", Content: "Ipsum Lorem"}
-	posts = append(posts, post1, post2)
-	newPostsList := ReversePosts(posts)
-	if newPostsList[0] != posts[1] {
-		t.Fatal("Expected new slice first element to be the old slice second element.")
-	}
-}

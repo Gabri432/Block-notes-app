@@ -74,14 +74,6 @@ func SearchPostInJSON(w http.ResponseWriter, jsonContent []byte, postId string) 
 	return GetPostById(w, posts, postId), posts
 }
 
-func ReversePosts(list Posts) Posts {
-	var newList Posts
-	for i := len(list) - 1; i >= 0; i-- {
-		newList = append(newList, list[i])
-	}
-	return newList
-}
-
 func UpdatePostList(w http.ResponseWriter, fileName string, postList Posts) {
 	if err := os.Truncate(fileName, 0); err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())

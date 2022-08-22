@@ -39,11 +39,14 @@ func main() {
 }
 
 func readPost(w http.ResponseWriter, r *http.Request) {
-	content, err := os.ReadFile("database/posts.json")
+	file, err := os.Open("database/posts.json")
+	r.URL.Query()
+	content := ScanPosts(file, 1, 21)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
+	defer file.Close()
 	var posts Posts
 	var drafts Posts
 	if err := json.Unmarshal(content, &posts); err != nil {

@@ -3,9 +3,13 @@
 <button id="change">Your posts</button>
 <br />
 <br />
+{{if not .}}
+<span class="loading-icon">{{template "loader"}}</span>
+{{end}}
 <div class="posts-section">
     {{range $index, $element := .}}
     {{template "post" $element}}
+    {{else}}
     {{end}}
     <a href="http://localhost:8081/new"><button id="new">+</button></a>
 </div>
@@ -53,4 +57,5 @@
                 break
         }
     }
+    // document.querySelector(".loading-icon").style.display = "none";
 </script>

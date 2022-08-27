@@ -1,44 +1,23 @@
 [
  {
-  "postId": "Checking pagination-1661592417",
-  "time": 1661592417,
-  "title": "Checking pagination",
-  "content": "Amazing!",
+  "postId": "Creating a new post-1661598419",
+  "time": 1661598419,
+  "title": "Creating a new post",
+  "content": "",
   "isDraft": true
  },
  {
-  "postId": "New post title-5",
-  "time": 1660589698,
-  "title": "New post title",
-  "content": "New post content updated",
+  "postId": "Let see what happen.-1661597586",
+  "time": 1661597586,
+  "title": "Let see what happen.",
+  "content": "HEllo",
+  "isDraft": true
+ },
+ {
+  "postId": "First Post-1661597477",
+  "time": 1661597477,
+  "title": "First Post",
+  "content": "I dunno",
   "isDraft": false
- },
- {
-  "postId": "New amazing post-!",
-  "time": 1660590051,
-  "title": "New amazing post",
-  "content": "save as new post",
-  "isDraft": false
- },
- {
-  "postId": "Perfection is nothing.-\u000f",
-  "time": 1660592895,
-  "title": "Perfection is nothing.",
-  "content": "Ooooooh yeaaaah!",
-  "isDraft": true
- },
- {
-  "postId": "Golang is strange-*",
-  "time": 1660593112,
-  "title": "Golang is strange",
-  "content": "I have issues while fixing pagination.",
-  "isDraft": true
- },
- {
-  "postId": "Adding new post-1661444545",
-  "time": 1661444545,
-  "title": "Adding new post",
-  "content": "Testing again.",
-  "isDraft": true
  }
 ]

@@ -94,8 +94,7 @@
             }
             }).then(() => window.location.href = "http://localhost:8081" + window.location.pathname + "?page=" + newRouteParam);
         } catch(e) {
-            console.log(e);
-            console.log("Could not upload other posts.")
+            window.location.href = "http://localhost:8081/error";
         }
     }
 </script>

@@ -14,7 +14,7 @@ type Post struct {
 	PostId  string `json:"postId"`
 	Time    int    `json:"time"`
 	Title   string `json:"title"`
-	Content string `json:"content,omitempty"`
+	Content string `json:"content"`
 	IsDraft bool   `json:"isDraft"`
 }
 
@@ -87,11 +87,18 @@ func createPost(w http.ResponseWriter, r *http.Request) {
 		RespondError(w, http.StatusNoContent, "No title provided.")
 		return
 	}
-	SavePost(w, post, "database/posts.json")
+	if SavePost(w, post, "database/posts.json") != nil {
+		RespondError(w, 500, "Could not create a new post!")
+		return
+	}
 }
 
 func updatePost(w http.ResponseWriter, r *http.Request) {
-	contentALL, _ := io.ReadAll(r.Body)
+	contentALL, err := io.ReadAll(r.Body)
+	if err != nil {
+		RespondError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
 	var newPost Post
 	json.Unmarshal(contentALL, &newPost)
 	content, err := os.ReadFile("database/posts.json")

@@ -86,11 +86,9 @@
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(body)
-            })
-            window.location.href = "http://localhost:8081/"
+            }).then(() => window.location.href = "http://localhost:8081")
         } catch(e) {
-            console.log(e);
-            console.log("Could not modify this post.")
+            window.location.href = "http://localhost:8081/error";
         }
     }
 
@@ -102,11 +100,9 @@
                 'Content-Type': 'application/json'
             },
             body: ''
-            })
-            window.location.href = "http://localhost:8081/"
+            }).then(() => window.location.href = "http://localhost:8081")
         } catch(e) {
-            console.log(e);
-            console.log("Could not delete this post.")
+            window.location.href = "http://localhost:8081/error";
         }
     }
 </script>

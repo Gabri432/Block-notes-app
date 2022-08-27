@@ -10,6 +10,11 @@ import (
 	"time"
 )
 
+type Data struct {
+	Content Post
+	Route   string
+}
+
 func GetFormData(w http.ResponseWriter, r *http.Request) Post {
 	err := r.ParseForm()
 	if err != nil {

@@ -32,7 +32,7 @@ func TestPaginatePosts(t *testing.T) {
 	bytes := PaginatePosts(file, 1)
 	var posts []Post
 	json.Unmarshal(bytes, &posts)
-	if len(posts) <= 5 {
+	if len(posts) > 5 {
 		t.Fatalf("Expected at maximum 5 elements, got %d.", len(posts))
 	}
 }

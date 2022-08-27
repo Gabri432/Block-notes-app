@@ -20,9 +20,9 @@ type Post struct {
 
 type Posts []Post
 
-type Data struct {
-	Content Post
-	Route   string
+type Page struct {
+	Posts    Posts `json:"posts"`
+	NextPage int   `json:"nextPage"`
 }
 
 func main() {
@@ -36,7 +36,11 @@ func main() {
 
 func readPost(w http.ResponseWriter, r *http.Request) {
 	file, err := os.Open("database/posts.json")
-	content := PaginatePosts(file, StringToInt(r.URL.Query().Get("page")))
+	currentPage := StringToInt(r.URL.Query().Get("page"))
+	if currentPage == 0 {
+		currentPage = 1
+	}
+	content := PaginatePosts(file, currentPage)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, err.Error())
 		return
@@ -57,9 +61,9 @@ func readPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if len(drafts) > 0 {
-		htmlPage.Execute(w, drafts)
+		htmlPage.Execute(w, Page{Posts: drafts, NextPage: currentPage + 1})
 	} else {
-		htmlPage.Execute(w, posts)
+		htmlPage.Execute(w, Page{Posts: posts, NextPage: currentPage + 1})
 	}
 }
 

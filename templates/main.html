@@ -3,15 +3,19 @@
 <button id="change">Your posts</button>
 <br />
 <br />
-{{if not .}}
+{{if not .Posts}}
 <span class="loading-icon">{{template "loader"}}</span>
 {{end}}
+<br />
 <div class="posts-section">
-    {{range $index, $element := .}}
+    {{range $index, $element := .Posts}}
     {{template "post" $element}}
     {{else}}
     {{end}}
     <a href="http://localhost:8081/new"><button id="new">+</button></a>
+</div>
+<div id="pagination-button">
+    <button class="pag" id="prev">&xlarr;</button><button class="pag" id="next">&xrarr;</button>
 </div>
 {{template "footer"}}
 
@@ -32,6 +36,24 @@
         transition: 0.25s;
         font-size: 45px;
     }
+    #pagination-button {
+        text-align: center;
+    }
+    .pag:hover {
+        background-color: #5c3353;
+        transition: 0.25s;
+        font-size: 21px;
+    }
+    #prev {
+        border-radius: 10px 0 0 10px;
+    }
+    #next {
+        border-radius: 0 10px 10px 0;
+    }
+    .pag {
+        background-color: blueviolet;
+        font-size: 20px;
+    }
 </style>
 <script>
     window.onload = () => {
@@ -46,6 +68,8 @@
         }
         change.addEventListener('click', switchRoute, false)
     }
+    document.getElementById("prev").addEventListener('click', changePage.bind(null, "prev"), false)
+    document.getElementById("next").addEventListener('click', changePage.bind(null, "next"), false)
     function switchRoute() {
         h1 = document.querySelector("h1").innerHTML;
         switch (h1) {
@@ -57,5 +81,21 @@
                 break
         }
     }
-    // document.querySelector(".loading-icon").style.display = "none";
+    async function changePage(bool) {
+        newRouteParam = (parseInt('{{.NextPage}}') - 2).toString()
+        if (bool == "next") {
+            newRouteParam = (parseInt('{{.NextPage}}')).toString()
+        }
+        try {
+            await fetch("http://localhost:8081" + window.location.pathname + "?page=" + newRouteParam ,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+            }).then(() => window.location.href = "http://localhost:8081" + window.location.pathname + "?page=" + newRouteParam);
+        } catch(e) {
+            console.log(e);
+            console.log("Could not upload other posts.")
+        }
+    }
 </script>

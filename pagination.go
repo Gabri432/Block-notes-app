@@ -55,7 +55,12 @@ func ScanPosts(file *os.File, startingLine, endingLine int) []byte {
 		textBytes = append(textBytes, scanner.Bytes()...)
 		currentLine++
 	}
-	textBytes = textBytes[:len(textBytes)-1]
+	if string(textBytes[len(textBytes)-1]) == "," {
+		textBytes = textBytes[:len(textBytes)-1]
+	}
+	if string(textBytes[len(textBytes)-1]) == "]" {
+		textBytes = textBytes[:len(textBytes)-1]
+	}
 	textBytes = append(textBytes, squareB[1])
 	return textBytes
 }
